@@ -7,9 +7,9 @@ from tiktoken import encoding_for_model
 import cv2 
 import base64
 from openai import OpenAI
-import os 
-import time
-import numpy as np
+#import os 
+#import time
+#import numpy as np
 import tempfile
 
 def count_tokens(prompt):
