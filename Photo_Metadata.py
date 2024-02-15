@@ -26,8 +26,8 @@ st.write("")
 st.sidebar.header("PHOTO - Title and Description Generator")
 
 # ----------------------Analytics section--------------------------------
-analytic_pass = os.environ.get('ANALYTIC_PASS')
-
+#analytic_pass = os.environ.get('ANALYTIC_PASS')
+analytic_pass = st.secrets["ANALYTIC_PASS"]
 streamlit_analytics.start_tracking()
 
 

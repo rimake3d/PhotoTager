@@ -20,8 +20,8 @@ st.image("PicturePerfectKeywords.jpg", width=100)
 st.header("Generate titles, descriptions and keywords for stock Videos")
 st.sidebar.header("NEW - VIDEO  Title and Description Generator")
 
-analytic_pass = os.environ.get('ANALYTIC_PASS')
-
+#analytic_pass = os.environ.get('ANALYTIC_PASS')
+analytic_pass = st.secrets["ANALYTIC_PASS"]
 streamlit_analytics.start_tracking()
 
 if "video_counter" not in st.session_state:
