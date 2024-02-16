@@ -11,6 +11,8 @@ import pandas as pd
 import time
 import streamlit_analytics
 import os 
+import zipfile
+import io
 
 
 
@@ -120,22 +122,22 @@ with tabMetadata:
         
         
         # Initialize session state for dataframes
-    if 'df_EPS' not in st.session_state:
-        st.session_state.df_EPS = pd.DataFrame(
+    if 'df_EPS_vid' not in st.session_state:
+        st.session_state.df_EPS_vid = pd.DataFrame(
             columns=["file name", "created date", "description", "country", "brief code", "title", "keywords"],
         )
 
-    if 'df_qHero' not in st.session_state:
-        st.session_state.df_qHero = pd.DataFrame(
+    if 'df_qHero_vid' not in st.session_state:
+        st.session_state.df_qHero_vid = pd.DataFrame(
             columns=["file name", "title", "description", "keywords"],
         )
 
-    if 'df_Adobe' not in st.session_state:
-        st.session_state.df_Adobe = pd.DataFrame(
+    if 'df_Adobe_vid' not in st.session_state:
+        st.session_state.df_Adobe_vid = pd.DataFrame(
             columns=["Filename", "Title", "Keywords", "Category", "Releases"],
         )
-    if 'df_Shutter' not in st.session_state:
-        st.session_state.df_Shutter = pd.DataFrame(
+    if 'df_Shutter_vid' not in st.session_state:
+        st.session_state.df_Shutter_vid = pd.DataFrame(
             columns=["Filename", "Description", "Keywords", "Categories", "Illustration", "Mature Content", "Editorial"],
         )
 
@@ -208,23 +210,21 @@ with tabMetadata:
             # Reset the buffer to the beginning to ensure it can be read from the start
             uploaded_file.seek(0)
             start_time = time.time()
-            title_video_beta, description, keywords = generate_video_metadata(uploaded_file, prompt, API_Key)
+            title_video_beta, video_description, keywords = generate_video_metadata(uploaded_file, prompt, API_Key)
             
             end_time = time.time()
             proc_time= end_time - start_time
             # To display the uploaded video after analysis, you might need to reset and read again
             uploaded_file.seek(0)
             st.write(f"{title_video_beta} - Was Title Generated for file: {uploaded_file.name}  |  Title Generated in {proc_time:.2f} seconds")
-            st.session_state.df_qHero.loc[len(st.session_state.df_qHero)] = [uploaded_file.name, title_video_beta, description, keywords]
-            st.session_state.df_EPS.loc[len(st.session_state.df_EPS)] = [uploaded_file.name, "", description, "", "", title_video_beta, keywords]
-            st.session_state.df_Adobe.loc[len(st.session_state.df_Adobe)] = [uploaded_file.name, title_video_beta, keywords, "", ""]
-            st.session_state.df_Shutter.loc[len(st.session_state.df_Shutter)] = [uploaded_file.name, title_video_beta, keywords, "", "", "", ""]
+            st.session_state.df_qHero_vid.loc[len(st.session_state.df_qHero_vid)] = [uploaded_file.name, title_video_beta, video_description, keywords]
+            st.session_state.df_EPS_vid.loc[len(st.session_state.df_EPS_vid)] = [uploaded_file.name, "", video_description, "", "", title_video_beta, keywords]
+            st.session_state.df_Adobe_vid.loc[len(st.session_state.df_Adobe_vid)] = [uploaded_file.name, title_video_beta, keywords, "", ""]
+            st.session_state.df_Shutter_vid.loc[len(st.session_state.df_Shutter_vid)] = [uploaded_file.name, title_video_beta, keywords, "", "", "", ""]
             
-
-    if st.session_state.video_counter >= no_calls:
-
-        pass
-    st.table(st.session_state.df_qHero)
+    streamlit_analytics.stop_tracking(unsafe_password = analytic_pass)
+    
+    st.table(st.session_state.df_qHero_vid)
     st.write("-------------------------------------------------------------------")
     st.text("Select which CSV you want to download")
     colqHero, colEPS, colAdobe, colShutter = st.columns(4)
@@ -250,22 +250,22 @@ with tabMetadata:
         zip_buffer = io.BytesIO()
         with zipfile.ZipFile(zip_buffer, 'a', zipfile.ZIP_DEFLATED, False) as zip_file:
             if qHero:
-                csv_qHero = st.session_state.df_qHero.to_csv(index=False).encode('utf-8')
+                csv_qHero = st.session_state.df_qHero_vid.to_csv(index=False).encode('utf-8')
                 filename_qHero = CSV_file_name_qHero + ".csv" if CSV_file_name_qHero else "qHero_file.csv"
                 add_csv_to_zip(zip_file, csv_qHero, filename_qHero)
 
             if EPS:
-                csv_EPS = st.session_state.df_EPS.to_csv(index=False).encode('utf-8')
+                csv_EPS = st.session_state.df_EPS_vid.to_csv(index=False).encode('utf-8')
                 filename_EPS = CSV_file_name_EPS + ".csv" if CSV_file_name_EPS else "EPS_file.csv"
                 add_csv_to_zip(zip_file, csv_EPS, filename_EPS)
 
             if Adobe:
-                csv_Adobe = st.session_state.df_Adobe.to_csv(index=False).encode('utf-8')
+                csv_Adobe = st.session_state.df_Adobe_vid.to_csv(index=False).encode('utf-8')
                 filename_Adobe = CSV_file_name_Adobe + ".csv" if CSV_file_name_Adobe else "Adobe_file.csv"
                 add_csv_to_zip(zip_file, csv_Adobe, filename_Adobe)
 
             if Shutter:
-                csv_Shutter = st.session_state.df_Shutter.to_csv(index=False).encode('utf-8')
+                csv_Shutter = st.session_state.df_Shutter_vid.to_csv(index=False).encode('utf-8')
                 filename_Shutter = CSV_file_name_Shutter + ".csv" if CSV_file_name_Shutter else "Shutter_file.csv"
                 add_csv_to_zip(zip_file, csv_Shutter, filename_Shutter)
 
@@ -300,4 +300,3 @@ with tabPlaygoround:
 #        )
 
 
-streamlit_analytics.stop_tracking(unsafe_password = analytic_pass)

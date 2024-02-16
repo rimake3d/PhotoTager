@@ -27,6 +27,7 @@ st.sidebar.header("PHOTO - Title and Description Generator")
 
 # ----------------------Analytics section--------------------------------
 #analytic_pass = os.environ.get('ANALYTIC_PASS')
+   
 analytic_pass = st.secrets["ANALYTIC_PASS"]
 streamlit_analytics.start_tracking()
 
@@ -242,7 +243,7 @@ with tabMetadata:
         
         st.sidebar.caption(f"""## {st.session_state.counter}/{no_free} - OpenAI API calls used""")
     
-
+    streamlit_analytics.stop_tracking(unsafe_password = analytic_pass)
     
     st.table(st.session_state.df_qHero)
     st.write(f"Total price: ${total_price:.5f}  |  Total time: {total_time:.2f} seconds")
@@ -416,4 +417,3 @@ with tabPlaygoround:
     prompt_play = f"""{prompt_context}\n{prompt_title}\n{prompt_description}{topic_main}{prompt_person}{prompt_ethnicity}{prompt_age}{keywords_true}{prompt_audience}"""
     st.text_area("Generated Prompt - To update Press CTRL+ENTER !", height=550, value=f"""{prompt_play}""")
 
-streamlit_analytics.stop_tracking(unsafe_password = analytic_pass)
