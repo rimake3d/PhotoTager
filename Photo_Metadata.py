@@ -49,9 +49,9 @@ def increment():
 no_free = 5
 
 try:
-    st.session_state.API_Key = st.secrets["API_KEY"]
+    st.session_state.Free_API_Key = st.secrets["API_KEY"]
 except FileNotFoundError as e:
-    st.session_state.API_Key = os.environ.get('OPENAI_API')
+    st.session_state.Free_API_Key = os.environ.get('OPENAI_API')
             
 
 
