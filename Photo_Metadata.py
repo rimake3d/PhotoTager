@@ -199,7 +199,7 @@ with tabMetadata:
                     proc_time = end_time - start_time
                     total_time = total_time + proc_time
                     total_price = total_price + price
-                    st.write(f"{title_auto_beta[40]} - Was Title Generated for file: {uploaded_file.name}  |  Title Generated in {proc_time:.2f} seconds  |  Price: ${price}")
+                    st.write(f"{title_auto_beta[0:40]} - Was Title Generated for file: {uploaded_file.name}  |  Title Generated in {proc_time:.2f} seconds  |  Price: ${price}")
                     st.session_state.df_qHero.loc[len(st.session_state.df_qHero)] = [uploaded_file.name, title_auto_beta, description, keywords]
                     st.session_state.df_EPS.loc[len(st.session_state.df_EPS)] = [uploaded_file.name, "", description, "", "", title_auto_beta, keywords]
                     st.session_state.df_Adobe.loc[len(st.session_state.df_Adobe)] = [uploaded_file.name, title_auto_beta, keywords, "", ""]
