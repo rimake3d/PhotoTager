@@ -141,7 +141,7 @@ with tabMetadata:
                         """
         
         # Offer the option to upload a text file containing a prompt
-        if st.checkbox("Use your own promt", key="basic-checkbox_prompt_01"):
+        if st.checkbox("Use your own prompt for more granular control", key="basic-checkbox_prompt_01"):
             if st.checkbox("Include Keywords", key="basic-checkbox_keywords_01"):
                 keywords_output = """Keywords: "keyword1,keyword2,..." """
                 keywords_button = " And Keywords"
