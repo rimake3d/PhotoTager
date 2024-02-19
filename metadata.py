@@ -32,7 +32,7 @@ def generate_image_metadata(uploaded_file, prompt_basic, API_Key):
     try:
         # Assuming generate_image_title_description_streamlit_api_low is a predefined function
         output_basic, price = generate_image_title_description_streamlit_api_low(uploaded_file_base64, prompt_basic, API_Key)
-        #print(output_basic)
+        print(output_basic)
         
         # Regex search for description
         description_match = re.search(r'Description: "?([^"]+)"?', output_basic, re.IGNORECASE)
@@ -40,7 +40,7 @@ def generate_image_metadata(uploaded_file, prompt_basic, API_Key):
             description = description_match.group(1)
         
         # Regex search for title
-        title_match = re.search(r'Title: "?([^"]+)"?', output_basic, re.IGNORECASE)
+        title_match = re.search(r'Title: "?([^"]+)"?(?=\s*Description)', output_basic, re.IGNORECASE)
         if title_match:
             title_basic_beta = title_match.group(1)
         

@@ -5,6 +5,7 @@
 #rom ast import Not
 #from curses import KEY_MAX
 from matplotlib import container
+from pyparsing import col
 from requests import session
 import streamlit as st
 import pandas as pd
@@ -76,11 +77,10 @@ with tabMetadata:
         show_button = st.button("Show Uploaded Images", key="basic_gen_01", help="Click to show uploaded images")
     with col_show_len:
         st.write(f"Number of uploaded images: {len(uploaded_files)}")
-        if uploaded_files:
-            st.write(f"Number of uploaded images: {len(uploaded_files)}")
+
     if uploaded_files is not None and show_button:
         for uploaded_file in uploaded_files:
-            st.image(uploaded_file, caption=f"Uploaded {uploaded_file.name}", use_column_width=True)
+            st.image(uploaded_file, caption=f"Uploaded {uploaded_file.name[0:40]}", width=200)
             
 
     total_price = 0
@@ -121,7 +121,7 @@ with tabMetadata:
             if c_button:
                 st.write("Enter API key")
         else:
-            button = st.button("Generate Photo Titles, Descriptions", key="basic_gen_05")
+            button = st.button("Generate Photo Titles, Descriptions", key="basic_gen_05" )
 
         prompt = ""
 
@@ -188,89 +188,94 @@ with tabMetadata:
                     st.write(str(prompt_auto))
     
     with st.container(border = True):
-        if uploaded_files and button and st.session_state.API_Key:
+        if uploaded_files and button and st.session_state.API_Key and len(uploaded_files) > 0:
             for uploaded_file in uploaded_files:
                 with st.spinner('Wait for it... Generating titles and descriptions...'):
                     start_time = time.time()
                     title_auto_beta, description, keywords, price = generate_image_metadata(uploaded_file, prompt_auto, st.session_state.API_Key)
-                    st.session_state.counter += 1
-                
+                    
+                    col1, col2 = st.columns([1, 15])
+                    with col1:
+                        st.image(uploaded_file, caption=f"Uploaded {uploaded_file.name}", width=100)
+                    with col2:
+                        st.write(f"""Title: {title_auto_beta}""")
+                        st.write(f"""Description: {description}""")
+                        st.write(f"""{uploaded_file.name}  |  Title Generated in {proc_time:.2f} seconds  |  Price: ${price}""")
                     end_time = time.time()
                     proc_time = end_time - start_time
                     total_time = total_time + proc_time
                     total_price = total_price + price
-                    st.write(f"{title_auto_beta[0:40]} - Was Title Generated for file: {uploaded_file.name}  |  Title Generated in {proc_time:.2f} seconds  |  Price: ${price}")
+                    
                     st.session_state.df_qHero.loc[len(st.session_state.df_qHero)] = [uploaded_file.name, title_auto_beta, description, keywords]
                     st.session_state.df_EPS.loc[len(st.session_state.df_EPS)] = [uploaded_file.name, "", description, "", "", title_auto_beta, keywords]
                     st.session_state.df_Adobe.loc[len(st.session_state.df_Adobe)] = [uploaded_file.name, title_auto_beta, keywords, "", ""]
                     st.session_state.df_Shutter.loc[len(st.session_state.df_Shutter)] = [uploaded_file.name, title_auto_beta, keywords, "", "", "", ""]
+
+            
+        
         
             
        
+
     
-    streamlit_analytics.stop_tracking(unsafe_password = analytic_pass)
     
-    with st.container(border = True):
+    with st.container(border=True):
         st.markdown("#### Results")
         st.table(st.session_state.df_qHero)
         st.write(f"Total price: ${total_price:.5f}  |  Total time: {total_time:.2f} seconds")
-    st.write("-------------------------------------------------------------------")
-    if uploaded_files and button and st.session_state.API_Key:
-        with st.container(border = True):
+
+    if  len(st.session_state.df_qHero) > 0:
+        with st.container(border=True):
             st.markdown("#### Download the results in CSV file/s")
             st.text("Select which CSV you want to download")
             colqHero, colEPS, colAdobe, colShutter = st.columns(4)
             with colqHero:
                 qHero = st.checkbox('qHero')
                 CSV_file_name_qHero = st.text_input("Name CSV file name", placeholder="You can leave empty", key="basic_qHero")
+                if qHero:
+                    csv_qHero = st.session_state.df_qHero.to_csv(index=False).encode('utf-8')
+                    filename_qHero = CSV_file_name_qHero + ".csv" if CSV_file_name_qHero else "qHero_file.csv"
+                    st.download_button(
+                    label="Download qHero CSV",
+                    data=csv_qHero,
+                    file_name=filename_qHero
+            )
             with colEPS:
                 EPS = st.checkbox('EPS')
                 CSV_file_name_EPS = st.text_input("Name CSV file name", placeholder="You can leave empty", key="basic_EPS")
+                if EPS:
+                    csv_EPS = st.session_state.df_qHero.to_csv(index=False).encode('utf-8')
+                    filename_EPS = CSV_file_name_qHero + ".csv" if CSV_file_name_qHero else "qHero_file.csv"
+                    st.download_button(
+                    label="Download EPS CSV",
+                    data=csv_EPS,
+                    file_name=filename_EPS
+                    )
             with colAdobe:
                 Adobe = st.checkbox('Adobe')
                 CSV_file_name_Adobe = st.text_input("Name CSV file name", placeholder="You can leave empty", key="basic_Adobe")
+                if Adobe:
+                    csv_Adobe = st.session_state.df_Adobe.to_csv(index=False).encode('utf-8')
+                    filename_Adobe = CSV_file_name_Adobe + ".csv" if CSV_file_name_Adobe else "Adobe_file.csv"
+                    st.download_button(
+                    label="Download Adobe CSV",
+                    data=csv_Adobe,
+                    file_name=filename_Adobe
+                    )
             with colShutter:
                 Shutter = st.checkbox('Shutter')
                 CSV_file_name_Shutter = st.text_input("Name CSV file name", placeholder="You can leave empty", key="basic_Shutter")
+                if Shutter:
+                    csv_Shutter = st.session_state.df_Shutter.to_csv(index=False).encode('utf-8')
+                    filename_Shutter = CSV_file_name_Shutter + ".csv" if CSV_file_name_Shutter else "Shutter_file.csv"
+                    st.download_button(
+                    label="Download Shutter CSV",
+                    data=csv_Shutter,
+                    file_name=filename_Shutter
+                    )
 
-            # Function to add a CSV to the ZIP
-            def add_csv_to_zip(zipfile, csv_content, filename):
-                zipfile.writestr(filename, csv_content)
-
-            # Check if any condition is true and create a ZIP file
-            if qHero or EPS or Adobe or Shutter:
-                zip_buffer = io.BytesIO()
-                with zipfile.ZipFile(zip_buffer, 'a', zipfile.ZIP_DEFLATED, False) as zip_file:
-                    if qHero:
-                        csv_qHero = st.session_state.df_qHero.to_csv(index=False).encode('utf-8')
-                        filename_qHero = CSV_file_name_qHero + ".csv" if CSV_file_name_qHero else "qHero_file.csv"
-                        add_csv_to_zip(zip_file, csv_qHero, filename_qHero)
-
-                    if EPS:
-                        csv_EPS = st.session_state.df_EPS.to_csv(index=False).encode('utf-8')
-                        filename_EPS = CSV_file_name_EPS + ".csv" if CSV_file_name_EPS else "EPS_file.csv"
-                        add_csv_to_zip(zip_file, csv_EPS, filename_EPS)
-
-                    if Adobe:
-                        csv_Adobe = st.session_state.df_Adobe.to_csv(index=False).encode('utf-8')
-                        filename_Adobe = CSV_file_name_Adobe + ".csv" if CSV_file_name_Adobe else "Adobe_file.csv"
-                        add_csv_to_zip(zip_file, csv_Adobe, filename_Adobe)
-
-                    if Shutter:
-                        csv_Shutter = st.session_state.df_Shutter.to_csv(index=False).encode('utf-8')
-                        filename_Shutter = CSV_file_name_Shutter + ".csv" if CSV_file_name_Shutter else "Shutter_file.csv"
-                        add_csv_to_zip(zip_file, csv_Shutter, filename_Shutter)
-
-                # Reset buffer's position to the beginning
-                zip_buffer.seek(0)
-
-                # Download button for the ZIP file
-                st.download_button(
-                    label="Download Selected CSV files as ZIP",
-                    data=zip_buffer,
-                    file_name="all_csv_files.zip",
-                    mime="application/zip"
-                )
+    
+streamlit_analytics.stop_tracking(unsafe_password = analytic_pass)
 
 with tabFree:
     st.write("this is for free")
@@ -287,13 +292,7 @@ with tabFree:
                 proc_time = end_time - start_time
                 total_time = total_time + proc_time
                 total_price = total_price + price
-                st.write(f"{title_auto_beta} - Was Title Generated for file: {uploaded_file.name}  |  Title Generated in {proc_time:.2f} seconds  |  Price: ${price}")
-                st.session_state.df_qHero.loc[len(st.session_state.df_qHero)] = [uploaded_file.name, title_auto_beta, description, keywords]
-                st.session_state.df_EPS.loc[len(st.session_state.df_EPS)] = [uploaded_file.name, "", description, "", "", title_auto_beta, keywords]
-                st.session_state.df_Adobe.loc[len(st.session_state.df_Adobe)] = [uploaded_file.name, title_auto_beta, keywords, "", ""]
-                st.session_state.df_Shutter.loc[len(st.session_state.df_Shutter)] = [uploaded_file.name, title_auto_beta, keywords, "", "", "", ""]
-    
-        
+                
        
 
 

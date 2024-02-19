@@ -55,12 +55,12 @@ def generate_image_title_description_streamlit_api_low(base64_image, prompt, ope
     image_response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
     
     input_prompt_tokens = count_tokens(prompt)
-    print(f"Prompt tokens: {input_prompt_tokens}")
+    #print(f"Prompt tokens: {input_prompt_tokens}")
     output_tokens = count_tokens(image_response.json()["choices"][0]["message"]["content"])
-    print(f"Output tokens: {output_tokens}")
+    #print(f"Output tokens: {output_tokens}")
     price = (input_prompt_tokens/1000)*0.01 + (output_tokens/1000)*0.03 + 0.00085
-    print(f"Price: ${price}")
-   
+    #print(f"Price: ${price}")
+    print(image_response.json()["choices"][0]["message"]["content"])
     return image_response.json()["choices"][0]["message"]["content"], price
 
   
