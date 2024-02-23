@@ -53,7 +53,8 @@ except FileNotFoundError as e:
 
 
 st.image("PicturePerfectKeywords.jpg", width=100)
-st.header("Generate titles, descriptions and keywords for stock photos")
+st.header("Images Metadata Generator")
+st.markdown("#### Generate titles, descriptions and keywords for stock photos")
 tabMetadata, tabPlaygoround = st.tabs(["Generate Image Metadata", "Try for FREE in Playground"])
 
 
