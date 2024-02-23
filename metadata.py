@@ -91,7 +91,7 @@ def generate_video_metadata(uploaded_file, prompt_basic, API_Key):
             description = description_match.group(1)
         
         # Regex search for title
-        title_match = re.search(r'Title: "?([^"]+)"?', output_basic, re.IGNORECASE)
+        title_match = re.search(r'Title: "?([^"]+)"?(?=\s*Description)', output_basic, re.IGNORECASE)
         if title_match:
             title_basic_beta = title_match.group(1)
         
@@ -104,4 +104,4 @@ def generate_video_metadata(uploaded_file, prompt_basic, API_Key):
         # Log the exception or handle it as needed
         print(f"An error occurred: {e}")
 
-    return title_basic_beta, description, keywords
+    return title_basic_beta, description, keywords, output_basic
