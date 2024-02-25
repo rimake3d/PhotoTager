@@ -131,16 +131,17 @@ with tabMetadata:
         keywords_output = ""
         keywords_button = ""
         prompt_auto = f"""
-                        These are frames of a video\r
+                        These are frames of an uploaded video\r
                         As the helpful Digital Asset Metadata Manager, analyze the following frames.\r
                         Generate  title and description from this frames.\r
-                        Folow below guidelines:\r
+                        Folow below guidelines.\r
                         Titles are accurate, relevant, descriptive and precise, around 60 characters long, and include 1-3 strong keywords.\r
                         Titles include descriptive language and strong adjectives and positive emotions.\r
                         Example of title 1:'Happy family enjoying a picnic in the park' , Example of title 2:'Stunning landscape photo of a mountain range'\r
                         Descriptions accurately represent photo, are concise and to the point. Include a variety of keywords, long-tail and short-tail keywords.\r
                         Descriptions use strong verbs and descriptive language and are up to 200 characters long.\r
                         Example of description 1:'Colorful sunset over the ocean with waves crashing against the shore.' , Example of description 2:'Aerial view of a city skyline at night with a river in the foreground.'\r
+                        \n
                         OUTPUT in the following FORMAT:\r
                         Title: "This is the title."\r
                         Description: "This is a description."\r
@@ -174,7 +175,7 @@ with tabMetadata:
                         These are frames of a video\r
                         As the helpful Digital Asset Metadata Manager, analyze the following frames.\r
                         Generate  title and description from this frames.\r
-                        Folow below guidelines:\r
+                        Folow below guidelines.\r
                         Titles are accurate, relevant, descriptive and precise, around 60 characters long, and include 1-3 strong keywords.\r
                         Titles include descriptive language and strong adjectives and positive emotions.\r
                         Example of title 1:'Happy family enjoying a picnic in the park' , Example of title 2:'Stunning landscape photo of a mountain range'\r
