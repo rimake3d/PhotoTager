@@ -141,6 +141,9 @@ with tabMetadata:
                         Descriptions accurately represent photo, are concise and to the point. Include a variety of keywords, long-tail and short-tail keywords.\r
                         Descriptions use strong verbs and descriptive language and are up to 200 characters long.\r
                         Example of description 1:'Colorful sunset over the ocean with waves crashing against the shore.' , Example of description 2:'Aerial view of a city skyline at night with a river in the foreground.'\r
+                        OUTPUT in the following FORMAT:\r
+                        Title: "This is the title."\r
+                        Description: "This is a description."\r
                         """
         
         # Offer the option to upload a text file containing a prompt
@@ -248,7 +251,7 @@ with tabMetadata:
                 CSV_file_name_EPS = st.text_input("Name CSV file name", placeholder="You can leave empty", key="basic_EPS")
                 if EPS:
                     csv_EPS = st.session_state.df_EPS_vid.to_csv(index=False).encode('utf-8')
-                    filename_EPS = CSV_file_name_qHero + ".csv" if CSV_file_name_qHero else "qHero_file.csv"
+                    filename_EPS = CSV_file_name_qHero + ".csv" if CSV_file_name_qHero else "EPS_file.csv"
                     st.download_button(
                     label="Download EPS CSV",
                     data=csv_EPS,
