@@ -257,7 +257,7 @@ with tabMetadata:
                     label="Download EPS CSV",
                     data=csv_EPS,
                     file_name=filename_EPS
-                    )
+            )
             with colAdobe:
                 Adobe = st.checkbox('Adobe')
                 CSV_file_name_Adobe = st.text_input("Name CSV file name", placeholder="You can leave empty", key="basic_Adobe")
@@ -268,7 +268,7 @@ with tabMetadata:
                     label="Download Adobe CSV",
                     data=csv_Adobe,
                     file_name=filename_Adobe
-                    )
+            )
             with colShutter:
                 Shutter = st.checkbox('Shutter')
                 CSV_file_name_Shutter = st.text_input("Name CSV file name", placeholder="You can leave empty", key="basic_Shutter")
@@ -279,7 +279,7 @@ with tabMetadata:
                     label="Download Shutter CSV",
                     data=csv_Shutter,
                     file_name=filename_Shutter
-                    )
+            )
 
     
 streamlit_analytics.stop_tracking(unsafe_password = analytic_pass)
