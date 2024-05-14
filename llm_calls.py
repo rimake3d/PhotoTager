@@ -236,14 +236,14 @@ def output_final(base64_image, openai_api_key):
 
 def analyze_video(uploaded_video_buffer, openai_api_key, prompt):
     # Write the uploaded video buffer to a temporary file
-    print(prompt)
+    print("This is a prompt in analyze_video" +prompt)
     print(openai_api_key)
     with tempfile.NamedTemporaryFile(delete=True, suffix='.mp4') as tmpfile:
         tmpfile.write(uploaded_video_buffer.read())
         tmpfile.flush
         video_path = tmpfile.name
         video = cv2.VideoCapture(video_path)
-
+    print(video)
     base64Frames = []
     while video.isOpened():
         success, frame = video.read()
@@ -252,6 +252,7 @@ def analyze_video(uploaded_video_buffer, openai_api_key, prompt):
         _, buffer = cv2.imencode(".jpg", frame)
         base64_string = base64.b64encode(buffer).decode("utf-8")
         base64Frames.append(base64_string)
+        
 
     video.release()
     print(len(base64Frames))
@@ -262,7 +263,7 @@ def analyze_video(uploaded_video_buffer, openai_api_key, prompt):
             "role": "user",
             "content": [
                 f"""{prompt}""",
-                *map(lambda x: {"image": x, "resize": 768}, base64Frames[0::60]),
+                *map(lambda x: {"image": x, "resize": 768}, base64Frames[0::200]),
             ],
         },
     ]

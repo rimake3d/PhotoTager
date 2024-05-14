@@ -71,19 +71,19 @@ def generate_video_metadata(uploaded_file, prompt_basic, API_Key):
     A tuple containing the title, description, keywords, and the price as returned by the API.
     If the API call fails or parsing fails, returns a message indicating what information was not found.
     """
-
+    print("This is a prompt of generate_video_metadata:" + prompt_basic)
     
     
     # Initialize return values
     title_basic_beta = "No title found - Contact support"
     description = "No description found - Contact support."
     keywords = ""
-    
+    output_basic = ""
 
     try:
         # Assuming generate_image_title_description_streamlit_api_low is a predefined function
         output_basic = analyze_video(uploaded_file, API_Key, prompt_basic)
-        print(output_basic)
+        print("this is an output:"+ output_basic)
         
         # Regex search for description
         description_match = re.search(r'Description: "?([^"]+)"?', output_basic, re.IGNORECASE)

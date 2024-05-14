@@ -88,7 +88,7 @@ with tabMetadata:
     
     if 'df_EPS_vid' not in st.session_state:
         st.session_state.df_EPS_vid = pd.DataFrame(
-            columns=["file name", "created date", "description", "country", "brief code", "title", "keywords"],
+            columns=columns=["file name", "keywords", "description", "title", "country", "poster timecode", "date created", "shot speed"],
     )
 
     if 'df_qHero_vid' not in st.session_state:
@@ -214,7 +214,7 @@ with tabMetadata:
                     st.write("Orginal OUTPUT from the model")
                     st.write(output)
                     st.session_state.df_qHero_vid.loc[len(st.session_state.df_qHero_vid)] = [uploaded_file.name, title_video_beta, video_description, keywords]
-                    st.session_state.df_EPS_vid.loc[len(st.session_state.df_EPS_vid)] = [uploaded_file.name, "", video_description, "", "", title_video_beta, keywords]
+                    st.session_state.df_EPS_vid.loc[len(st.session_state.df_EPS_vid)] = [uploaded_file.name, keywords, video_description, title_video_beta , "", "", "", ""]
                     st.session_state.df_Adobe_vid.loc[len(st.session_state.df_Adobe_vid)] = [uploaded_file.name, title_video_beta, keywords, "", ""]
                     st.session_state.df_Shutter_vid.loc[len(st.session_state.df_Shutter_vid)] = [uploaded_file.name, title_video_beta, keywords, "", "", "", ""]
 
@@ -252,7 +252,7 @@ with tabMetadata:
                 CSV_file_name_EPS = st.text_input("Name CSV file name", placeholder="You can leave empty", key="basic_EPS")
                 if EPS:
                     csv_EPS = st.session_state.df_EPS_vid.to_csv(index=False).encode('utf-8')
-                    filename_EPS = CSV_file_name_qHero + ".csv" if CSV_file_name_qHero else "EPS_file.csv"
+                    filename_EPS = CSV_file_name_EPS + ".csv" if CSV_file_name_EPS else "EPS_file.csv"
                     st.download_button(
                     label="Download EPS CSV",
                     data=csv_EPS,

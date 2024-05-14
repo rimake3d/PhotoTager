@@ -192,6 +192,8 @@ with tabMetadata:
             for uploaded_file in uploaded_files:
                 with st.spinner('Wait for it... Generating titles and descriptions...'):
                     start_time = time.time()
+                    st.write(prompt_auto)
+                    print(prompt_auto)
                     title_auto_beta, description, keywords, price = generate_image_metadata(uploaded_file, prompt_auto, st.session_state.API_Key)
                     
                     col1, col2 = st.columns([1, 15])
