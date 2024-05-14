@@ -88,7 +88,7 @@ with tabMetadata:
     
     if 'df_EPS_vid' not in st.session_state:
         st.session_state.df_EPS_vid = pd.DataFrame(
-            columns=columns=["file name", "keywords", "description", "title", "country", "poster timecode", "date created", "shot speed"],
+            columns=["file name", "keywords", "description", "title", "country", "poster timecode", "date created", "shot speed"],
     )
 
     if 'df_qHero_vid' not in st.session_state:
